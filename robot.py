@@ -18,7 +18,7 @@ class Robot(pygame.sprite.Sprite):
     self.attach_center_sensor()
 
     sprites = (self.body, self.leftSensor, self.rightSensor, self.centerSensor)
-    self.sprites = pygame.sprite.RenderPlain(sprites)
+    self.sprites = pygame.sprite.Group(sprites)
 
   def attach_left_sensor(self):
     self.leftSensor = Robot.make_sensor()
