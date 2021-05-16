@@ -14,24 +14,28 @@ def main():
   
   # prepare the game objects
   robot = Robot((200, 100), BACKGROUND_COLOR)
-  line = Line((400, 400), BACKGROUND_COLOR)
+  line = Line((400, 400), BACKGROUND_COLOR, (0,100,0))
   allSprites = pygame.sprite.Group(line, robot)
 
   manuallyControllingRobot = True
   clock = pygame.time.Clock()
   while 1:
-      clock.tick(60)
-      for event in pygame.event.get():
-          if event.type == pygame.QUIT: sys.exit()
+    clock.tick(60)
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT: sys.exit()
 
-          if manuallyControllingRobot:
-              robot.process_event(event)
+      if manuallyControllingRobot:
+          robot.process_event(event)
 
-      # draw the scene
-      screen.blit(background, (0,0))
-      allSprites.update()
-      allSprites.draw(screen)
-      pygame.display.flip()
+    # draw the scene
+    screen.blit(background, (0,0))
+
+    if pygame.sprite.spritecollideany(robot, pygame.sprite.Group(line), pygame.sprite.collide_mask):
+      print("this happened")
+    
+    allSprites.update()
+    allSprites.draw(screen)
+    pygame.display.flip()
 
 if __name__ == "__main__":
   main()
