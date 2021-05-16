@@ -7,13 +7,14 @@ class Robot(pygame.sprite.Sprite):
   SENSOR_WIDTH = 20
   SENSOR_HEIGHT = 20
 
-  def __init__(self):
+  def __init__(self, backgroundColor):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
     # Create an image of the block, and fill it with a color.
     # This could also be an image loaded from the disk.
     self.image = pygame.Surface([Robot.BODY_RADIUS*2, Robot.BODY_RADIUS*2])
+    self.image.fill(backgroundColor)
     pygame.draw.circle(self.image, Robot.BODY_COLOR, [int(Robot.BODY_RADIUS), int(Robot.BODY_RADIUS)], int(Robot.BODY_RADIUS))
     # Fetch the rectangle object that has the dimensions of the image
     # Update the position of this object by setting the values of rect.x and rect.y

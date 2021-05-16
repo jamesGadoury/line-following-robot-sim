@@ -8,10 +8,12 @@ def main():
   speed = [2, 2]
 
   screen = pygame.display.set_mode(size)
-  background = pygame.Surface(screen.get_size())  
+  background = pygame.Surface(screen.get_size())
+  BACKGROUND_COLOR = (255, 255, 255)
+  background.fill(BACKGROUND_COLOR)
   
   # prepare the game objects
-  robot = Robot()
+  robot = Robot(BACKGROUND_COLOR)
   allSprites = pygame.sprite.Group(robot)
 
   while 1:
@@ -25,7 +27,7 @@ def main():
           # speed[1] = -speed[1]
 
       # whites out background
-      # screen.fill((255, 255, 255))
+    #   screen.fill((255, 255, 255))
 
       # draw the scene
       screen.blit(background, (0,0))
