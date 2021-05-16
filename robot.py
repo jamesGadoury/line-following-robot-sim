@@ -1,11 +1,9 @@
 import pygame
- 
+from sensor import Sensor
+
 class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
-  SENSOR_COLOR = (52, 225, 235)
-  SENSOR_WIDTH = 20
-  SENSOR_HEIGHT = 20
 
   def __init__(self, initPosition, backgroundColor, maxVelocity=1, maxAngularVelocity=4):
     # Call the parent class (Sprite) constructor
@@ -27,12 +25,6 @@ class Robot(pygame.sprite.Sprite):
     # Update the position of this object by setting the values of rect.x and rect.y
     self.rect = self.image.get_rect()
 
-    # the 'sensors' will be rectangles displaced at different locations relative to the base image rectangle 
-    self.update_sensor_rects()
-    pygame.draw.rect(self.image, Robot.SENSOR_COLOR, self.leftSensorRect)
-    pygame.draw.rect(self.image, Robot.SENSOR_COLOR, self.centerSensorRect)
-    pygame.draw.rect(self.image, Robot.SENSOR_COLOR, self.rightSensorRect)
-
     # need to save original image for rotations
     self.original_image = self.image
 
@@ -46,6 +38,18 @@ class Robot(pygame.sprite.Sprite):
 
     self.maxVelocity = maxVelocity
     self.maxAngularVelocity = maxAngularVelocity
+
+    self.leftSensor = Sensor((self.rect.left + 15, self.rect.top + 20))
+    self.centerSensor = Sensor((self.rect.left + 40, self.rect.top + 20))
+    self.rightSensor = Sensor((self.rect.left + 65, self.rect.top + 20))
+
+    # the 'sensors' will be rectangles displaced at different locations relative to the base image rectangle 
+    self.update_sensors()
+
+  def sensors(self):
+    return pygame.sprite.Group(self.leftSensor, self.centerSensor, self.rightSensor)
+  def sprites(self):
+    return pygame.sprite.Group(self, self.leftSensor, self.centerSensor, self.rightSensor)
 
   def turning(self):
     return self.maxVelocity != 0
@@ -62,27 +66,17 @@ class Robot(pygame.sprite.Sprite):
     self.position += self.direction * self.velocity
     self.rect.center = self.position
 
-  def update_sensor_rects(self):
-    # need to update the sensor rects positions relative to self.rect
-    # so that we can use the updated coords when checking for line overlap
-
-    # todo - lots a magic numbers, make this more straightforward
-    self.leftSensorRect = pygame.Rect((self.rect.left + 15,
-                                       self.rect.top + 20),
-                                       (Robot.SENSOR_WIDTH, Robot.SENSOR_HEIGHT))
-    self.centerSensorRect = pygame.Rect((self.rect.left + 40,
-                                       self.rect.top + 20),
-                                       (Robot.SENSOR_WIDTH, Robot.SENSOR_HEIGHT))
-    self.rightSensorRect = pygame.Rect((self.rect.left + 65,
-                                       self.rect.top + 20),
-                                       (Robot.SENSOR_WIDTH, Robot.SENSOR_HEIGHT))
+  def update_sensors(self):
+    for sensor in self.sensors():
+      sensor.rotate(self.angularVelocity)
+      sensor.update_position(self.velocity)
     
   def update(self):
     if self.turning():
       self.rotate()
-    
+      
     self.update_position()
-    self.update_sensor_rects()
+    self.update_sensors()
 
   def process_event(self, event):
     if event.type == pygame.KEYDOWN:

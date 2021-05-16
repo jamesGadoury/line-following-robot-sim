@@ -15,7 +15,7 @@ def main():
   # prepare the game objects
   robot = Robot((200, 100), BACKGROUND_COLOR)
   line = Line((400, 400), BACKGROUND_COLOR, (0,100,0))
-  allSprites = pygame.sprite.Group(line, robot)
+  allSprites = pygame.sprite.Group(line, robot.sprites())
 
   manuallyControllingRobot = True
   clock = pygame.time.Clock()
@@ -30,8 +30,8 @@ def main():
     # draw the scene
     screen.blit(background, (0,0))
 
-    if pygame.sprite.spritecollideany(robot, pygame.sprite.Group(line), pygame.sprite.collide_mask):
-      print("this happened")
+    # if pygame.sprite.spritecollideany(robot, pygame.sprite.Group(line), pygame.sprite.collide_mask):
+    #   print("this happened")
     
     allSprites.update()
     allSprites.draw(screen)
