@@ -18,7 +18,6 @@ class Sensor(pygame.sprite.Sprite):
     self.offset = pygame.Vector2(offset)
     self.angle = 0
     self.mask = pygame.mask.from_surface(self.image)
-    self.sensed_line = False
 
   def move(self, velocity):
     self.position += velocity
@@ -35,5 +34,5 @@ class Sensor(pygame.sprite.Sprite):
     # or else the collision detection won't work
     self.mask = pygame.mask.from_surface(self.image)
 
-  def read(self, line):
-    self.sensed_line = pygame.sprite.collide_mask(self, line)
+  def sense(self, line):
+    return pygame.sprite.collide_mask(self, line)

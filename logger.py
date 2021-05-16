@@ -8,8 +8,11 @@ class Logger(pygame.sprite.Sprite):
   def __init__(self):
     super().__init__()
 
-    self.font = pygame.font.SysFont("Arial Bold", 56)
+    self.font = pygame.font.SysFont("Arial Bold", 48)
     self.rect = pygame.Rect((10,10), (Logger.WIDTH, Logger.HEIGHT))
+    self.refresh_logs()
+  
+  def refresh_logs(self):
     self.logs = pygame.sprite.Group()
 
   def log(self, message):

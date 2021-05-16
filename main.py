@@ -21,7 +21,7 @@ def main():
   
   manuallyControllingRobot = True
   clock = pygame.time.Clock()
-  logger.log("Line Following Robot")
+  
 
   while 1:
     clock.tick(60)
@@ -34,9 +34,11 @@ def main():
     # draw the scene
     screen.blit(background, (0,0))
     robot.sense(line)
-    
+    logger.refresh_logs()
+    logger.log("Line Following Robot")
     allSprites.update()
     allSprites.draw(screen)
+    robot.sense(line)
     logger.draw(screen)
     pygame.display.flip()
 

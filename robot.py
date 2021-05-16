@@ -45,6 +45,8 @@ class Robot(pygame.sprite.Sprite):
       "right":  Sensor(self.position, (Robot.BODY_RADIUS-25, -Robot.BODY_RADIUS+25), Robot.BODY_COLOR)
     }
 
+    self.logger = logger
+
   def velocity(self):
     return self.direction * self.speed
 
@@ -73,8 +75,8 @@ class Robot(pygame.sprite.Sprite):
     return pygame.sprite.collide_mask(self.sensors[sensorID], line)  
 
   def sense(self, line):
-    for sensor in self.sensors.values():
-      sensor.read(line)
+    for sensorID, sensor in self.sensors.items():
+      self.logger.log(f"{sensorID} sensor reads: {sensor.sense(line)}")
 
   def update_position(self):
     # Update the position vector and the rect.
