@@ -5,7 +5,7 @@ class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
+  def __init__(self, initPosition, controller, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
@@ -45,6 +45,7 @@ class Robot(pygame.sprite.Sprite):
       "right":  Sensor(self.position, (Robot.BODY_RADIUS-25, -Robot.BODY_RADIUS+25), Robot.BODY_COLOR)
     }
 
+    self.controller = controller
     self.logger = logger
 
   def velocity(self):
@@ -75,8 +76,12 @@ class Robot(pygame.sprite.Sprite):
     return pygame.sprite.collide_mask(self.sensors[sensorID], line)  
 
   def sense(self, line):
+    sensorReadings = {}
     for sensorID, sensor in self.sensors.items():
-      self.logger.log(f"{sensorID} sensor reads: {sensor.sense(line)}")
+      sensorReading = sensor.sense(line)
+      sensorReadings[sensorID] = sensorReading
+      self.logger.log(f"{sensorID} sensor reads: {sensorReading}")
+    return sensorReadings
 
   def update_position(self):
     # Update the position vector and the rect.
@@ -92,16 +97,21 @@ class Robot(pygame.sprite.Sprite):
     self.update_position()
 
   def process_event(self, event):
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_UP:
-        self.speed = self.maxSpeed
-      elif event.key == pygame.K_LEFT:
-        # pygame follows convention of rotation being (+) counter clockwise
-        self.angularSpeed = self.maxAngularSpeed
-      elif event.key == pygame.K_RIGHT:
-        self.angularSpeed = -self.maxAngularSpeed
-    elif event.type == pygame.KEYUP:
-      if event.key == pygame.K_UP:
-        self.speed = 0
-      elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-        self.angularSpeed = 0
+    self.process_commands(self.controller(event, None))
+
+  def process_environment(self, line):
+    sensorReadings = self.sense(line)
+    self.process_commands(self.controller(None, sensorReadings))
+
+  def process_commands(self, commands):
+    if "move_forward" in commands:
+      self.speed = self.maxSpeed
+    if "turn_left" in commands:
+      self.angularSpeed = self.maxAngularSpeed
+    if "turn_right" in commands:
+      self.angularSpeed = -self.maxAngularSpeed
+    if "stop_moving" in commands:
+      self.speed = 0
+    if "stop_turning" in commands:
+      self.angularSpeed = 0
+    
