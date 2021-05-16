@@ -12,6 +12,7 @@ def main():
   
   # prepare the game objects
   robot = Robot()
+  allSprites = pygame.sprite.Group(robot)
 
   while 1:
       for event in pygame.event.get():
@@ -28,7 +29,7 @@ def main():
 
       # draw the scene
       screen.blit(background, (0,0))
-      robot.draw(screen)
+      allSprites.draw(screen)
       # screen.blit(robot.img, robot.position)
       pygame.display.flip()
 
