@@ -12,13 +12,11 @@ class Sensor(pygame.sprite.Sprite):
     self.image.set_colorkey(robotColor)
     self.image.fill(Sensor.COLOR)
     self.rect = self.image.get_rect(center=position)
-    # pygame.draw.rect(self.image, Sensor.COLOR, self.rect)
     self.original_image = self.image
     self.position = pygame.Vector2(position)
     self.offset = pygame.Vector2(offset)
     self.angle = 0
     self.mask = pygame.mask.from_surface(self.image)
-    # print(self.mask_count())
 
   def move(self, velocity):
     self.position += velocity
@@ -31,6 +29,4 @@ class Sensor(pygame.sprite.Sprite):
     self.rect = self.image.get_rect(center=self.rect.center + self.offset)
   
   def update(self):
-    # self.mask = pygame.mask.from_threshold(self.image.convert_alpha(), Sensor.COLOR, (1, 1, 1, 255))
     self.mask = pygame.mask.from_surface(self.image)
-    # print(self.mask.count())

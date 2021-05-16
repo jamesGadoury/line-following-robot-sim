@@ -29,9 +29,7 @@ def main():
 
     # draw the scene
     screen.blit(background, (0,0))
-    # robot.sense(line)
-    # if pygame.sprite.spritecollideany(robot, pygame.sprite.Group(line), pygame.sprite.collide_mask):
-    #   print("this happened")
+    robot.sense(line)
     
     allSprites.update()
     allSprites.draw(screen)

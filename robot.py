@@ -47,7 +47,6 @@ class Robot(pygame.sprite.Sprite):
 
   def sprites(self):
     return pygame.sprite.Group(self, self.sensors["left"], self.sensors["center"], self.sensors["right"])
-    # return pygame.sprite.Group(self)
 
   def turning(self):
     return self.angularVelocity != 0
@@ -60,18 +59,25 @@ class Robot(pygame.sprite.Sprite):
     self.rect = self.image.get_rect(center=self.rect.center)
     for sensor in self.sensors.values():
       sensor.rotate(self.angularVelocity)
-  
-  # def sense(self, line):
-  #   sensed_collisions = ""
+
+  def sensor_reading(self, sensorID, line):
+    if sensorID not in self.sensors.keys():
+      print(f"sensor_reading called with {sensorID} that isn't present in robot's sensors!")
+      return False
     
-  #   if pygame.sprite.collide_mask(self.leftSensor, line):
-  #     sensed_collisions += "left sensor,"
-  #   if pygame.sprite.collide_mask(self.rightSensor, line):
-  #     sensed_collisions += "right sensor,"
-  #   if pygame.sprite.collide_mask(self.centerSensor, line):
-  #     sensed_collisions += "center sensor"
-  #   if sensed_collisions:
-  #     print(sensed_collisions)
+    return pygame.sprite.collide_mask(self.sensors[sensorID], line)  
+
+  def sense(self, line):
+    sensed_collisions = ""
+    
+    if (self.sensor_reading("left", line)):
+      sensed_collisions += "left sensor,"
+    if (self.sensor_reading("right", line)):
+      sensed_collisions += "right sensor,"
+    if (self.sensor_reading("center", line)):
+      sensed_collisions += "center sensor"
+    if sensed_collisions:
+      print(sensed_collisions)
 
   def update_position(self):
     # Update the position vector and the rect.
@@ -80,18 +86,11 @@ class Robot(pygame.sprite.Sprite):
     for sensor in self.sensors.values():
       sensor.move(self.direction*self.velocity)
 
-  def update_sensors(self):
-    pass
-  # for sensor in self.sensors():
-  #   sensor.rotate(self.angularVelocity)
-  #   sensor.update_position(self.velocity)
-    
   def update(self):
     if self.turning():
       self.rotate()
       
     self.update_position()
-    self.update_sensors()
 
   def process_event(self, event):
     if event.type == pygame.KEYDOWN:
