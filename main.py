@@ -5,7 +5,6 @@ def main():
   pygame.init()
 
   size = width, height = 800, 800 
-  speed = [2, 2]
 
   screen = pygame.display.set_mode(size)
   background = pygame.Surface(screen.get_size())
@@ -13,26 +12,23 @@ def main():
   background.fill(BACKGROUND_COLOR)
   
   # prepare the game objects
-  robot = Robot(BACKGROUND_COLOR)
+  robot = Robot((200, 100), BACKGROUND_COLOR)
   allSprites = pygame.sprite.Group(robot)
 
+  manuallyControllingRobot = True
+  clock = pygame.time.Clock()
   while 1:
+      clock.tick(60)
       for event in pygame.event.get():
           if event.type == pygame.QUIT: sys.exit()
 
-      # robotrect = robotrect.move(speed)
-      # if robotrect.left < 0 or robotrect.right > width:
-          # speed[0] = -speed[0]
-      # if robotrect.top < 0 or robotrect.bottom > height:
-          # speed[1] = -speed[1]
-
-      # whites out background
-    #   screen.fill((255, 255, 255))
+          if manuallyControllingRobot:
+              robot.process_event(event)
 
       # draw the scene
       screen.blit(background, (0,0))
+      allSprites.update()
       allSprites.draw(screen)
-      # screen.blit(robot.img, robot.position)
       pygame.display.flip()
 
 if __name__ == "__main__":
