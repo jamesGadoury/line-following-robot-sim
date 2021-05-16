@@ -1,21 +1,23 @@
 import sys, pygame
 from robot import Robot
 from line import Line
+from log import Log
 
 def main():
   pygame.init()
 
-  size = width, height = 800, 800 
+  size = width, height = 1200, 800 
 
   screen = pygame.display.set_mode(size)
   background = pygame.Surface(screen.get_size())
-  BACKGROUND_COLOR = (255, 255, 255)
+  BACKGROUND_COLOR = (64, 64,100) 
   background.fill(BACKGROUND_COLOR)
   
   # prepare the game objects
-  robot = Robot((200, 100), BACKGROUND_COLOR)
-  line = Line((400, 400), BACKGROUND_COLOR, (0,100,0))
-  allSprites = pygame.sprite.Group(line, robot.sprites())
+  robot = Robot((600, 100), BACKGROUND_COLOR)
+  line = Line((800, 400), BACKGROUND_COLOR, (0,100,0))
+  log = Log()
+  allSprites = pygame.sprite.Group(line, robot.sprites(), log)
 
   manuallyControllingRobot = True
   clock = pygame.time.Clock()

@@ -73,16 +73,8 @@ class Robot(pygame.sprite.Sprite):
     return pygame.sprite.collide_mask(self.sensors[sensorID], line)  
 
   def sense(self, line):
-    sensed_collisions = ""
-    
-    if (self.sensor_reading("left", line)):
-      sensed_collisions += "left sensor,"
-    if (self.sensor_reading("right", line)):
-      sensed_collisions += "right sensor,"
-    if (self.sensor_reading("center", line)):
-      sensed_collisions += "center sensor"
-    if sensed_collisions:
-      print(sensed_collisions)
+    for sensor in self.sensors.values():
+      sensor.read(line)
 
   def update_position(self):
     # Update the position vector and the rect.
