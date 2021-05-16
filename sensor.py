@@ -29,4 +29,6 @@ class Sensor(pygame.sprite.Sprite):
     self.rect = self.image.get_rect(center=self.rect.center + self.offset)
   
   def update(self):
+    # have to update mask every time this Sensor's surface (image) is updated,
+    # or else the collision detection won't work
     self.mask = pygame.mask.from_surface(self.image)
