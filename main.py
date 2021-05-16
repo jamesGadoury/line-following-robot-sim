@@ -1,5 +1,6 @@
 import sys, pygame
 from robot import Robot
+from line import Line
 
 def main():
   pygame.init()
@@ -13,7 +14,8 @@ def main():
   
   # prepare the game objects
   robot = Robot((200, 100), BACKGROUND_COLOR)
-  allSprites = pygame.sprite.Group(robot)
+  line = Line((400, 400), BACKGROUND_COLOR)
+  allSprites = pygame.sprite.Group(line, robot)
 
   manuallyControllingRobot = True
   clock = pygame.time.Clock()

@@ -17,6 +17,9 @@ class Robot(pygame.sprite.Sprite):
     # fill the base image with whatever background color we were given
     self.image.fill(backgroundColor)
 
+    # make the background color transparent in image
+    self.image.set_colorkey(backgroundColor)
+
     # this circle will be the 'body' of the robot
     pygame.draw.circle(self.image, Robot.BODY_COLOR, (Robot.BODY_RADIUS, Robot.BODY_RADIUS), Robot.BODY_RADIUS)
 
