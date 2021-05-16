@@ -5,7 +5,7 @@ class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
+  def __init__(self, initPosition, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
     # Call the parent class (Sprite) constructor
     super().__init__()
 

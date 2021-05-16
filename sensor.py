@@ -2,7 +2,6 @@ import pygame
  
 class Sensor(pygame.sprite.Sprite):
   COLOR = (52, 225, 235)
-  SENSED_LINE_COLOR = (255, 0, 0)
   WIDTH = 20
   HEIGHT = 20
 
