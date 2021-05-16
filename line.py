@@ -21,4 +21,7 @@ class Line(pygame.sprite.Sprite):
     # Update the position of this object by setting the values of rect.x and rect.y
     self.rect = self.image.get_rect(center=initPosition)
 
-    self.mask = pygame.mask.from_threshold(self.image, lineColor, (1, 1, 1, 255))
+    self.mask = pygame.mask.from_surface(self.image)
+    # self.mask = pygame.mask.from_threshold(self.image.convert_alpha(), lineColor, (1, 1, 1, 255))
+    # print(self.mask.count())
+    # print(f"line rect width:{self.rect.width}, height:{self.rect.height}, area:{self.rect.height*self.rect.width}")

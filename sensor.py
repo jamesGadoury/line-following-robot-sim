@@ -5,27 +5,16 @@ class Sensor(pygame.sprite.Sprite):
   WIDTH = 20
   HEIGHT = 20
 
-  def __init__(self, initPosition):
+  def __init__(self, robotImage, rectCoords):
     # Call the parent class (Sprite) constructor
     super().__init__()
+    self.update(robotImage, rectCoords)
 
-    # initialize a base image rectangle for the robot
-    self.image = pygame.Surface([Sensor.WIDTH, Sensor.HEIGHT])
+  def update(self, robotImage, rectCoords):
+    self.rect  = pygame.Rect(rectCoords, (Sensor.WIDTH, Sensor.HEIGHT))
+    self.image = robotImage.subsurface(self.rect)
     self.image.fill(Sensor.COLOR)
-    self.rect = self.image.get_rect()
 
-    self.original_image = self.image
-    self.position = initPosition
-    self.angle = 0
-    self.direction = pygame.math.Vector2((0,-1))
-
-  def rotate(self, angularVelocity):
-    # Rotate the direction vector and then the image.
-    self.direction.rotate_ip(angularVelocity)
-    self.angle += angularVelocity
-    self.image = pygame.transform.rotate(self.original_image, -self.angle)
-    self.rect = self.image.get_rect(center=self.rect.center)
-
-  def update_position(self, velocity):
-    self.position += self.direction * velocity
-    self.rect.center = self.position
+    # self.mask = pygame.mask.from_threshold(self.image.convert_alpha(), Sensor.COLOR, (1, 1, 1, 255))
+    self.mask = pygame.mask.from_surface(self.image)
+    # print(self.mask.count())

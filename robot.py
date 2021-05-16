@@ -39,15 +39,16 @@ class Robot(pygame.sprite.Sprite):
     self.maxVelocity = maxVelocity
     self.maxAngularVelocity = maxAngularVelocity
 
-    self.leftSensor = Sensor((self.rect.left + 15, self.rect.top + 20))
-    self.centerSensor = Sensor((self.rect.left + 40, self.rect.top + 20))
-    self.rightSensor = Sensor((self.rect.left + 65, self.rect.top + 20))
+    self.leftSensor = Sensor(self.image, (self.rect.left + 15, self.rect.top + 20))
+    self.centerSensor = Sensor(self.image, (self.rect.left + 40, self.rect.top + 20))
+    self.rightSensor = Sensor(self.image, (self.rect.left + 65, self.rect.top + 20))
 
     # the 'sensors' will be rectangles displaced at different locations relative to the base image rectangle 
     self.update_sensors()
 
   def sensors(self):
     return pygame.sprite.Group(self.leftSensor, self.centerSensor, self.rightSensor)
+
   def sprites(self):
     return pygame.sprite.Group(self, self.leftSensor, self.centerSensor, self.rightSensor)
 
@@ -61,15 +62,29 @@ class Robot(pygame.sprite.Sprite):
     self.image = pygame.transform.rotate(self.original_image, -self.angle)
     self.rect = self.image.get_rect(center=self.rect.center)
   
+  # def sense(self, line):
+  #   self.sensors().update(self.image, self.rect)
+  #   sensed_collisions = ""
+    
+  #   if pygame.sprite.collide_mask(self.leftSensor, line):
+  #     sensed_collisions += "left sensor,"
+  #   if pygame.sprite.collide_mask(self.rightSensor, line):
+  #     sensed_collisions += "right sensor,"
+  #   if pygame.sprite.collide_mask(self.centerSensor, line):
+  #     sensed_collisions += "center sensor"
+  #   if sensed_collisions:
+  #     print(sensed_collisions)
+
   def update_position(self):
     # Update the position vector and the rect.
     self.position += self.direction * self.velocity
     self.rect.center = self.position
 
   def update_sensors(self):
-    for sensor in self.sensors():
-      sensor.rotate(self.angularVelocity)
-      sensor.update_position(self.velocity)
+    pass
+  # for sensor in self.sensors():
+  #   sensor.rotate(self.angularVelocity)
+  #   sensor.update_position(self.velocity)
     
   def update(self):
     if self.turning():
