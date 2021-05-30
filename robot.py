@@ -1,6 +1,6 @@
-from networking import Subscriber
+from subscribers import CommandSubscriber
+from publishers import SensorPublisher
 import pygame
-import zmq 
 from sensor import Sensor
 
 class Robot(pygame.sprite.Sprite):
@@ -50,7 +50,8 @@ class Robot(pygame.sprite.Sprite):
     self.logger = logger
 
     # create Subscriber that accepts COMMAND messages
-    self.commandSubscriber = Subscriber("COMMAND")
+    self.commandSubscriber = CommandSubscriber()
+    self.sensorPublisher = SensorPublisher()
 
   def velocity(self):
     return self.direction * self.speed
@@ -83,7 +84,7 @@ class Robot(pygame.sprite.Sprite):
     sensorReadings = {}
     for sensorID, sensor in self.sensors.items():
       sensorReading = sensor.sense(line)
-      sensorReadings[sensorID] = sensorReading
+      sensorReadings[sensorID] = bool(sensorReading)
       self.logger.log(f"{sensorID} sensor reads: {sensorReading}")
     return sensorReadings
 
@@ -101,7 +102,7 @@ class Robot(pygame.sprite.Sprite):
     self.update_position()
 
   def process_environment(self, line):
-    sensorReadings = self.sense(line)
+    self.sense(line)
     self.process_commands(self.commandSubscriber.try_get_message_string()) 
 
   def process_commands(self, commands):

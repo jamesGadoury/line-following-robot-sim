@@ -1,9 +1,9 @@
 import pygame
-from networking import Publisher
+from publishers import CommandPublisher
 
-class ManualCommandPublisher(Publisher):
+class ManualCommandPublisher(CommandPublisher):
   def __init__(self):
-    super().__init__(messageID="COMMAND")
+    super().__init__()
 
   def process_event(self, event):
     commands = []

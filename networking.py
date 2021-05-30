@@ -1,10 +1,7 @@
 import zmq
 
-PUBLISHER_ADDRESS = "tcp://*:5556"
-SUBSCRIBER_ADDRESS = "tcp://localhost:5556"
-
 class Publisher:
-  def __init__(self, messageID, address=PUBLISHER_ADDRESS):
+  def __init__(self, messageID, address):
     context = zmq.Context()
     self.socket = context.socket(zmq.PUB)
     self.socket.bind(address)
@@ -15,7 +12,7 @@ class Publisher:
     self.socket.send_string(f"{self.messageID}: {message}")
 
 class Subscriber:
-  def __init__(self, messageID, address=SUBSCRIBER_ADDRESS):
+  def __init__(self, messageID, address):
     # set up zero mq messaging
     context = zmq.Context()
     self.socket = context.socket(zmq.SUB)

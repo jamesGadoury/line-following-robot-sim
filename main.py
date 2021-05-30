@@ -4,7 +4,7 @@ import sys
 from robot import Robot
 from line import Line
 from logger import Logger
-from controllers import ManualCommandPublisher
+from manual_command_publisher import ManualCommandPublisher
 
 def main(manual=False):
   pygame.init()
