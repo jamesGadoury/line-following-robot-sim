@@ -1,11 +1,12 @@
 import pygame
+import zmq 
 from sensor import Sensor
 
 class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, controller, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
+  def __init__(self, initPosition, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
@@ -45,8 +46,14 @@ class Robot(pygame.sprite.Sprite):
       "right":  Sensor(self.position, (Robot.BODY_RADIUS-25, -Robot.BODY_RADIUS+25), Robot.BODY_COLOR)
     }
 
-    self.controller = controller
     self.logger = logger
+
+    # set up zero mq messaging
+    context = zmq.Context()
+    self.socket = context.socket(zmq.SUB)
+    self.socket.connect("tcp://localhost:5556")
+    self.socket.setsockopt_string(zmq.SUBSCRIBE, "COMMAND")
+
 
   def velocity(self):
     return self.direction * self.speed
@@ -96,14 +103,15 @@ class Robot(pygame.sprite.Sprite):
       
     self.update_position()
 
-  def process_event(self, event):
-    self.process_commands(self.controller(event, None))
-
   def process_environment(self, line):
     sensorReadings = self.sense(line)
-    self.process_commands(self.controller(None, sensorReadings))
+    try:
+      self.process_commands(self.socket.recv_string(flags=zmq.NOBLOCK))
+    except zmq.Again as e:
+      pass
 
   def process_commands(self, commands):
+    print(f"Received Commands: {commands}")
     if "move_forward" in commands:
       self.speed = self.maxSpeed
     if "turn_left" in commands:
