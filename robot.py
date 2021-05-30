@@ -84,7 +84,7 @@ class Robot(pygame.sprite.Sprite):
     sensorReadings = {}
     for sensorID, sensor in self.sensors.items():
       sensorReading = sensor.sense(line)
-      sensorReadings[sensorID] = bool(sensorReading)
+      sensorReadings[sensorID] = sensorReading
       self.logger.log(f"{sensorID} sensor reads: {sensorReading}")
     return sensorReadings
 

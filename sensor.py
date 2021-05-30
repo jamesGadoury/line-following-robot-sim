@@ -35,4 +35,4 @@ class Sensor(pygame.sprite.Sprite):
     self.mask = pygame.mask.from_surface(self.image)
 
   def sense(self, line):
-    return pygame.sprite.collide_mask(self, line)
+    return bool(pygame.sprite.collide_mask(self, line))
