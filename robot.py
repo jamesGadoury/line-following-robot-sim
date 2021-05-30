@@ -1,3 +1,4 @@
+from networking import Subscriber
 import pygame
 import zmq 
 from sensor import Sensor
@@ -48,12 +49,8 @@ class Robot(pygame.sprite.Sprite):
 
     self.logger = logger
 
-    # set up zero mq messaging
-    context = zmq.Context()
-    self.socket = context.socket(zmq.SUB)
-    self.socket.connect("tcp://localhost:5556")
-    self.socket.setsockopt_string(zmq.SUBSCRIBE, "COMMAND")
-
+    # create Subscriber that accepts COMMAND messages
+    self.commandSubscriber = Subscriber("COMMAND")
 
   def velocity(self):
     return self.direction * self.speed
@@ -105,13 +102,9 @@ class Robot(pygame.sprite.Sprite):
 
   def process_environment(self, line):
     sensorReadings = self.sense(line)
-    try:
-      self.process_commands(self.socket.recv_string(flags=zmq.NOBLOCK))
-    except zmq.Again as e:
-      pass
+    self.process_commands(self.commandSubscriber.try_get_message_string()) 
 
   def process_commands(self, commands):
-    print(f"Received Commands: {commands}")
     if "move_forward" in commands:
       self.speed = self.maxSpeed
     if "turn_left" in commands:
