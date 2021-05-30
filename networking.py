@@ -8,7 +8,7 @@ class Publisher:
 
     self.messageID = messageID
 
-  def send_message(self, message):
+  def publish_message(self, message):
     self.socket.send_string(f"{self.messageID}: {message}")
 
 class Subscriber:

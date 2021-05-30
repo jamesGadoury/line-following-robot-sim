@@ -73,20 +73,13 @@ class Robot(pygame.sprite.Sprite):
     for sensor in self.sensors.values():
       sensor.rotate(self.angularSpeed)
 
-  def sensor_reading(self, sensorID, line):
-    if sensorID not in self.sensors.keys():
-      print(f"sensor_reading called with {sensorID} that isn't present in robot's sensors!")
-      return False
-    
-    return pygame.sprite.collide_mask(self.sensors[sensorID], line)  
-
   def sense(self, line):
     sensorReadings = {}
     for sensorID, sensor in self.sensors.items():
       sensorReading = sensor.sense(line)
       sensorReadings[sensorID] = sensorReading
       self.logger.log(f"{sensorID} sensor reads: {sensorReading}")
-    return sensorReadings
+    self.sensorPublisher.publish_readings(sensorReadings)
 
   def update_position(self):
     # Update the position vector and the rect.

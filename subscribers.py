@@ -1,4 +1,5 @@
 from networking import Subscriber
+import json
 
 class CommandSubscriber(Subscriber):
   def __init__(self):
@@ -7,3 +8,7 @@ class CommandSubscriber(Subscriber):
 class SensorSubscriber(Subscriber):
   def __init__(self):
     super().__init__("SENSOR", "tcp://localhost:5557")
+
+  def receive_readings(self):
+    message = super().try_get_message_string()
+    return json.loads(message)

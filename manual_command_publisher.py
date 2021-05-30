@@ -12,18 +12,18 @@ class ManualCommandPublisher(CommandPublisher):
     
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_UP:
-        self.send_message("move_forward")
+        self.publish_message("move_forward")
       
       elif event.key == pygame.K_LEFT:
         # pygame follows convention of rotation being (+) counter clockwise
-        self.send_message("turn_left")
+        self.publish_message("turn_left")
      
       elif event.key == pygame.K_RIGHT:
-        self.send_message("turn_right")
+        self.publish_message("turn_right")
    
     elif event.type == pygame.KEYUP:
       if event.key == pygame.K_UP:
-        self.send_message("stop_moving")
+        self.publish_message("stop_moving")
       
       elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-        self.send_message("stop_turning")
+        self.publish_message("stop_turning")

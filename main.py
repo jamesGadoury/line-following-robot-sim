@@ -38,7 +38,6 @@ def main(manual=False):
       if manual:
         manual_command_publisher.process_event(event)
 
-
     # draw the scene
     screen.blit(background, (0,0))
     robot.sense(line)
