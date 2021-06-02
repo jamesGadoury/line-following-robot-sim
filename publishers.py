@@ -10,4 +10,4 @@ class SensorPublisher(Publisher):
     super().__init__("SENSOR", "tcp://*:5557")
 
   def publish_readings(self, sensorReadings):
-    super().publish_message(json.dumps(sensorReadings))
+    super().publish_message_json(sensorReadings)
