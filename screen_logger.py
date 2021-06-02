@@ -1,7 +1,7 @@
 import pygame
 from log_item import LogItem
 
-class Logger(pygame.sprite.Sprite):
+class ScreenLogger(pygame.sprite.Sprite):
   WIDTH = 100
   HEIGHT = 800
   
@@ -9,7 +9,7 @@ class Logger(pygame.sprite.Sprite):
     super().__init__()
 
     self.font = pygame.font.SysFont("Arial Bold", 48)
-    self.rect = pygame.Rect((10,10), (Logger.WIDTH, Logger.HEIGHT))
+    self.rect = pygame.Rect((10,10), (ScreenLogger.WIDTH, ScreenLogger.HEIGHT))
     self.refresh_logs()
   
   def refresh_logs(self):

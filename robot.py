@@ -7,7 +7,7 @@ class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, logger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
+  def __init__(self, initPosition, screenLogger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
@@ -47,7 +47,7 @@ class Robot(pygame.sprite.Sprite):
       "right":  Sensor(self.position, (Robot.BODY_RADIUS-25, -Robot.BODY_RADIUS+25), Robot.BODY_COLOR)
     }
 
-    self.logger = logger
+    self.screenLogger = screenLogger
 
     # create Subscriber that accepts COMMAND messages
     self.commandSubscriber = CommandSubscriber()
@@ -78,7 +78,7 @@ class Robot(pygame.sprite.Sprite):
     for sensorID, sensor in self.sensors.items():
       sensorReading = sensor.sense(line)
       sensorReadings[sensorID] = str(sensorReading).lower()
-      self.logger.log(f"{sensorID} sensor reads: {sensorReading}")
+      self.screenLogger.log(f"{sensorID} sensor reads: {sensorReading}")
     self.sensorPublisher.publish_readings(sensorReadings)
 
   def update_position(self):

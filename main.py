@@ -3,7 +3,7 @@ import argparse
 import sys
 from robot import Robot
 from line import Line
-from logger import Logger
+from screen_logger import ScreenLogger
 from manual_command_publisher import ManualCommandPublisher
 
 def main(manual=False):
@@ -20,9 +20,9 @@ def main(manual=False):
     manual_command_publisher = ManualCommandPublisher()
   
   # prepare the game objects
-  logger = Logger()
+  screenLogger = ScreenLogger()
 
-  robot = Robot((600, 120), logger, BACKGROUND_COLOR)
+  robot = Robot((600, 120), screenLogger, BACKGROUND_COLOR)
   line = Line((800, 400), BACKGROUND_COLOR, (0,100,0))
   allSprites = pygame.sprite.Group(line, robot.sprites())
  
@@ -41,12 +41,12 @@ def main(manual=False):
     # draw the scene
     screen.blit(background, (0,0))
     robot.sense(line)
-    logger.refresh_logs()
-    logger.log("Line Following Robot")
+    screenLogger.refresh_logs()
+    screenLogger.log("Line Following Robot")
     allSprites.update()
     allSprites.draw(screen)
     robot.process_environment(line)
-    logger.draw(screen)
+    screenLogger.draw(screen)
     pygame.display.flip()
 
 if __name__ == "__main__":
