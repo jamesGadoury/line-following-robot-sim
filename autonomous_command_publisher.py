@@ -17,13 +17,13 @@ class AutonomousCommandPublisher(CommandPublisher):
 
     logging.info(f"Received sensor readings: {json.dumps(sensorReadings)}")
     commands = []
-    
-    if sensorReadings["left"]:
-      commands.append("turn_right")
-    elif sensorReadings["right"]:
-      commands.append("turn_left")
-    elif sensorReadings["center"]:
+
+    if sensorReadings["center"]:
       commands.append("move_forward")
+    elif sensorReadings["left"]:
+      commands.append("turn_left")
+    elif sensorReadings["right"]:
+      commands.append("turn_right")
     else:
       commands.append("stop_turning")
       commands.append("stop_moving")
