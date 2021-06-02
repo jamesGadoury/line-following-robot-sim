@@ -9,7 +9,7 @@ class AutonomousCommandPublisher(CommandPublisher):
 
   def process_sensor_readings(self):
     sensorReadings = self.sensorSubscriber.receive_readings()
-    print(sensorReadings)
+    
     if not sensorReadings:
       return
     
