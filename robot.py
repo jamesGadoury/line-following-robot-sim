@@ -2,12 +2,13 @@ from subscribers import CommandSubscriber
 from publishers import SensorPublisher
 import pygame
 from sensor import Sensor
+import logging
 
 class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, screenLogger, backgroundColor, maxSpeed=1, maxAngularSpeed=4):
+  def __init__(self, initPosition, screenLogger, backgroundColor, maxSpeed=0.1, maxAngularSpeed=0.1):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
@@ -53,6 +54,9 @@ class Robot(pygame.sprite.Sprite):
     self.commandSubscriber = CommandSubscriber()
     self.sensorPublisher = SensorPublisher()
 
+    self.commandsReceived = 0
+    self.sensorReadingsPublished = 0
+
   def velocity(self):
     return self.direction * self.speed
 
@@ -81,6 +85,9 @@ class Robot(pygame.sprite.Sprite):
       self.screenLogger.log(f"{sensorID} sensor reads: {sensorReading}")
     self.sensorPublisher.publish_readings(sensorReadings)
 
+    self.sensorReadingsPublished += 1
+    logging.debug(f"Sensor Readings published {self.sensorReadingsPublished}")
+
   def update_position(self):
     # Update the position vector and the rect.
     self.position += self.velocity()
@@ -99,14 +106,24 @@ class Robot(pygame.sprite.Sprite):
     self.process_commands(self.commandSubscriber.try_get_message_string()) 
 
   def process_commands(self, commands):
+    if not commands:
+      return
+
+    self.commandsReceived += 1
+    logging.debug(f"process_commands called: {self.commandsReceived}")
     if "move_forward" in commands:
+      logging.info(f"Processing move_forward command. Setting speed to {self.maxSpeed}")
       self.speed = self.maxSpeed
     if "turn_left" in commands:
+      logging.info(f"Processing turn_left command. Setting angular speed to {self.maxAngularSpeed}")
       self.angularSpeed = self.maxAngularSpeed
     if "turn_right" in commands:
+      logging.info(f"Processing turn_right command. Setting angular speed to {-self.maxAngularSpeed}")
       self.angularSpeed = -self.maxAngularSpeed
     if "stop_moving" in commands:
+      logging.info(f"Processing stop_moving command. Setting speed to 0")
       self.speed = 0
     if "stop_turning" in commands:
+      logging.info(f"Processing stop_turning command. Setting angularSpeed to 0")
       self.angularSpeed = 0
     

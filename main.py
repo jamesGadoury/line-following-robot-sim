@@ -36,7 +36,7 @@ def main(manual=False):
   clock = pygame.time.Clock()
   
   while True:
-    clock.tick(60)
+    clock.tick(3600)
     
     for event in pygame.event.get():
       if event.type == pygame.QUIT: 

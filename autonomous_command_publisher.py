@@ -8,9 +8,14 @@ class AutonomousCommandPublisher(CommandPublisher):
     super().__init__()
 
     self.sensorSubscriber = SensorSubscriber()
+    self.sensorReadingsReceived = 0
+    self.commandsPublished = 0
 
   def process_sensor_readings(self):
     sensorReadings = self.sensorSubscriber.receive_readings()
+
+    self.sensorReadingsReceived += 1
+    logging.debug(f"process_sensor_readings: {self.sensorReadingsReceived}")
     
     if not sensorReadings:
       return
@@ -31,6 +36,9 @@ class AutonomousCommandPublisher(CommandPublisher):
     message = ",".join(commands)
     logging.info(f"Commanding: {message}")
     self.publish_message(message)
+
+    self.commandsPublished += 1
+    logging.debug(f"Sent robot commands: {self.commandsPublished}")
 
 if __name__ == "__main__":
   logging.basicConfig(level=logging.DEBUG)
