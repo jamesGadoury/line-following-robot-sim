@@ -5,8 +5,13 @@ from robot import Robot
 from line import Line
 from screen_logger import ScreenLogger
 from manual_command_publisher import ManualCommandPublisher
+import logging
 
 def main(manual=False):
+  
+  # for now we will log everything including debug to console
+  logging.basicConfig(level=logging.DEBUG)
+
   pygame.init()
 
   size = width, height = 1200, 800 
@@ -17,12 +22,14 @@ def main(manual=False):
   background.fill(BACKGROUND_COLOR)
 
   if manual:
+    logging.info("Using manual command publisher")
     manual_command_publisher = ManualCommandPublisher()
   
   # prepare the game objects
   screenLogger = ScreenLogger()
 
   robot = Robot((600, 120), screenLogger, BACKGROUND_COLOR)
+
   line = Line((800, 400), BACKGROUND_COLOR, (0,100,0))
   allSprites = pygame.sprite.Group(line, robot.sprites())
  

@@ -1,5 +1,7 @@
 from publishers import CommandPublisher
 from subscribers import SensorSubscriber
+import logging
+import json
 
 class AutonomousCommandPublisher(CommandPublisher):
   def __init__(self):
@@ -12,17 +14,26 @@ class AutonomousCommandPublisher(CommandPublisher):
     
     if not sensorReadings:
       return
+
+    logging.info(f"Received sensor readings: {json.dumps(sensorReadings)}")
+    commands = []
     
     if sensorReadings["left"]:
-      self.publish_message("turn_right")
+      commands.append("turn_right")
     elif sensorReadings["right"]:
-      self.publish_message("turn_left")
+      commands.append("turn_left")
     elif sensorReadings["center"]:
-      self.publish_message("move_forward")
+      commands.append("move_forward")
     else:
-      self.publish_message("stop_turning, stop_moving")
+      commands.append("stop_turning")
+      commands.append("stop_moving")
+
+    message = ",".join(commands)
+    logging.info(f"Commanding: {message}")
+    self.publish_message(message)
 
 if __name__ == "__main__":
+  logging.basicConfig(level=logging.DEBUG)
   publisher = AutonomousCommandPublisher()
 
   while True:
