@@ -6,7 +6,10 @@
 - pyzmq: `pip3 install pyzmq`
 
 ## How to run
+Manual:
 - `python3 main.py --manual` : run the simulator using a manual controller, which responds to arrow key presses to move robot
+
+Autonomous:
 - `python3 main.py`: without the manual flag, the simulator will subscribe to a port `tcp://localhost:5556` for command messages and publish sensor readings to `tcp://*:5557`
 
 If you run `python3 main.py` without the `--manual` flag, the simulator is reliant on a publisher to publish command messages to the robot. In another window (while the process running `python3 main.py` is still running), you can run `python3 autonomous_command_publisher.py`. This will subscribe to the sensor messages and publish command messages to the robot. You can also use it as an example to write and run your own autonomous command publisher.
