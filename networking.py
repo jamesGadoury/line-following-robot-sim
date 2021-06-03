@@ -1,6 +1,4 @@
 import zmq
-import json
-import logging
 
 class Publisher:
   def __init__(self, address):

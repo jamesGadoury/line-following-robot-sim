@@ -1,5 +1,4 @@
 from networking import Publisher
-import json
 
 class CommandPublisher(Publisher):
   def __init__(self):

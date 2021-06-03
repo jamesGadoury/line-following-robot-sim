@@ -1,6 +1,5 @@
 from publishers import CommandPublisher
 from subscribers import SensorSubscriber
-import time
 import logging
 import json
 
@@ -49,5 +48,4 @@ if __name__ == "__main__":
   publisher = AutonomousCommandPublisher()
 
   while True:
-    time.sleep(0.1)
     publisher.process_sensor_readings()
