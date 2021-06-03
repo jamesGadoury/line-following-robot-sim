@@ -34,9 +34,9 @@ def main(manual=False):
   allSprites = pygame.sprite.Group(line, robot.sprites())
  
   clock = pygame.time.Clock()
-  
+
   while True:
-    clock.tick(3600)
+    clock.tick(60)
     
     for event in pygame.event.get():
       if event.type == pygame.QUIT: 
@@ -47,6 +47,7 @@ def main(manual=False):
 
     # draw the scene
     screen.blit(background, (0,0))
+
     robot.sense(line)
     screenLogger.refresh_logs()
     screenLogger.log("Line Following Robot")

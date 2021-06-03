@@ -8,7 +8,7 @@ class Robot(pygame.sprite.Sprite):
   BODY_COLOR = (239, 66, 245)
   BODY_RADIUS = 50
 
-  def __init__(self, initPosition, screenLogger, backgroundColor, maxSpeed=0.1, maxAngularSpeed=0.1):
+  def __init__(self, initPosition, screenLogger, backgroundColor, maxSpeed=0.3, maxAngularSpeed=0.3):
     # Call the parent class (Sprite) constructor
     super().__init__()
 
@@ -79,6 +79,7 @@ class Robot(pygame.sprite.Sprite):
 
   def sense(self, line):
     sensorReadings = {}
+    
     for sensorID, sensor in self.sensors.items():
       sensorReading = sensor.sense(line)
       sensorReadings[sensorID] = sensorReading
@@ -103,7 +104,8 @@ class Robot(pygame.sprite.Sprite):
 
   def process_environment(self, line):
     self.sense(line)
-    self.process_commands(self.commandSubscriber.try_get_message_string()) 
+    message = self.commandSubscriber.try_get_message_string() 
+    self.process_commands(message) 
 
   def process_commands(self, commands):
     if not commands:
