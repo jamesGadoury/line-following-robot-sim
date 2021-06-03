@@ -54,9 +54,6 @@ class Robot(pygame.sprite.Sprite):
     self.commandSubscriber = CommandSubscriber()
     self.sensorPublisher = SensorPublisher()
 
-    self.commandsReceived = 0
-    self.sensorReadingsPublished = 0
-
   def velocity(self):
     return self.direction * self.speed
 
@@ -84,10 +81,8 @@ class Robot(pygame.sprite.Sprite):
       sensorReading = sensor.sense(line)
       sensorReadings[sensorID] = sensorReading
       self.screenLogger.log(f"{sensorID} sensor reads: {sensorReading}")
+  
     self.sensorPublisher.publish_readings(sensorReadings)
-
-    self.sensorReadingsPublished += 1
-    logging.debug(f"Sensor Readings published {self.sensorReadingsPublished}")
 
   def update_position(self):
     # Update the position vector and the rect.
@@ -111,8 +106,7 @@ class Robot(pygame.sprite.Sprite):
     if not commands:
       return
 
-    self.commandsReceived += 1
-    logging.debug(f"process_commands called: {self.commandsReceived}")
+    logging.debug(f"process_commands called")
     if "move_forward" in commands:
       logging.info(f"Processing move_forward command. Setting speed to {self.maxSpeed}")
       self.speed = self.maxSpeed
