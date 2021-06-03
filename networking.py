@@ -29,7 +29,11 @@ class Subscriber:
     # So then, we would need to roll our own process for flushing out the older messages by the subscriber.
     # Which seems more annoying than just subscribing to everything sent on this port; when each publisher has a unique port anyways.
     self.socket.subscribe("") # subscribe to everything at this port
-    self.socket.setsockopt(zmq.CONFLATE, 1)  # last msg only.
+
+    # Since all our subscribers care about is the most recent state, we only keep the last message received.
+    self.socket.setsockopt(zmq.CONFLATE, 1)  # last msg only. 
+
+    # Now that our socket is set up, we can connect it to the address
     self.socket.connect(address)
     
 
